@@ -2,10 +2,15 @@
 //
 
 #include <iostream>
+#include <windows.h>
 
-int main()
+
+int main(int argc,char** argv)
 {
+
     std::cout << "Hello World!\n";
+
+    return 0;
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
