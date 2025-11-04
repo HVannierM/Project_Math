@@ -1,7 +1,7 @@
 #include <iostream>
 #include <windows.h>
 
-void InitConole() {
+void InitConsole() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD mode;
 
@@ -11,7 +11,7 @@ void InitConole() {
 
 int main()
 {
-    InitConole();
+    InitConsole();
     std::cout << "Hello Wrold";
     std::cout << "\x1b[2J" << std::endl;
     std::cout << "\x1b[H" << std::endl;
