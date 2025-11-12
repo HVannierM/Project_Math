@@ -11,7 +11,10 @@ class Mesh
 {
 
 public:
+	Mesh(int res);
 	void Debug();
+	void GenerateCircle(float radius);
+	void GenerateHalfCircle(float radius);
 private:
 	std::vector<Vertex> Vertexs;
 

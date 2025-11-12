@@ -6,3 +6,11 @@ void Mesh::Debug() {
 		std::cout << i << "x: " << Vertexs[i].x << "y: " << Vertexs[i].y << "z: " << Vertexs[i].z << std::endl;
 	}
 }
+
+void Mesh::GenerateCircle(float radius) {
+	
+}
+
+void Mesh::GenerateHalfCircle(float radius) {
+
+}
