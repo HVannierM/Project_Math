@@ -15,6 +15,9 @@ public:
 	void Debug();
 	void GenerateCircle(float radius);
 	void GenerateHalfCircle(float radius);
+	void GenerateRectangle(float width, float height);
+	void GenerateSquare(float size);
+
 private:
 	std::vector<Vertex> Vertexs;
 
