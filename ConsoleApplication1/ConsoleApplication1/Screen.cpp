@@ -1,65 +1,44 @@
-#include "Screen.h"
 #include <iostream>
-#include <windows.h>
+#include "Screen.h"
+#include "Mesh.h"
+#include "Settings.h"
 
-Screen::Screen(Settings settings) : ScreenSettings(settings) {
-
-}
-
-void Screen::ClearConsole()
+Screen::Screen(Settings const& settings)
+: m_width(settings.GetScreenWidth())
+, m_height(settings.GetScreenHeight())
+, m_background(settings.GetScreenBackground())
+, m_screenMeshProjection(settings.GetScreenMeshProjection())
+, m_screenPosition(settings.GetScreenPosition())
+, m_meshPosition(settings.GetMeshPosition())
+, m_pixels(m_width * m_height, '.')
 {
-    std::cout << "\x1B[2J";
 }
 
-void Screen::ShowCursor()
+void Screen::Display() const
 {
-    std::cout << "\x1B[?25h";
-}
-
-void Screen::HideCursor()
-{
-    std::cout << "\x1B[?25l";
-}
-
-void Screen::SetCursorStartPos()
-{
-    std::cout << "\x1B[H";
-}
-
-
-
-void Screen::InitConsole() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    DWORD mode;
-
-    GetConsoleMode(hConsole, &mode);
-    SetConsoleMode(hConsole, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-}
-
-void Screen::SetConsoleSize(int width, int height)
-{
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    COORD bufferSize;
-    bufferSize.X = width;
-    bufferSize.Y = height;
-    SetConsoleScreenBufferSize(hConsole, bufferSize);
-
-    SMALL_RECT windowSize;
-    windowSize.Left = 0;
-    windowSize.Top = 0;
-    windowSize.Right = width - 1;
-    windowSize.Bottom = height - 1;
-    SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
-}
-
-void Screen::Display() {
-    for (int i = 0; i < ScreenSettings.GetHeight(); i++)
+    for(int i = 0; i < m_height; i++)
     {
-        for (int j = 0; j < ScreenSettings.GetWidth(); j++)
+        for(int j = 0; j < m_width; j++)
         {
-            std::cout << '.';
+            std::cout << m_pixels[m_width * i + j];
         }
         std::cout << std::endl;
     }
+}
+
+void Screen::Display(Mesh const& mesh) {
+
+    std::vector<Vertex> meshVertices;
+    meshVertices = mesh.GetVertices();
+    for (int i = 0; i < m_height; i++)
+    {
+        for (int j = 0; j < m_width; j++)
+        {
+            std::cout << m_pixels[m_width * i + j];
+        }
+        std::cout << std::endl;
+    }
+
+   
+
 }

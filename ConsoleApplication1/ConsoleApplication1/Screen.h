@@ -1,19 +1,21 @@
 #pragma once
-#include "Settings.h"
+#include <vector>
+class Mesh;
+class Settings;
 
 class Screen
 {
-public:
-    Screen(Settings settings);
-    void InitConsole();
-    void SetConsoleSize(int width, int height);
+    public:
+    Screen(Settings const& settings);
+    void Display() const;
+    void Display(Mesh const& mesh); 
 
-    void ClearConsole();
-    void ShowCursor();
-    void HideCursor();
-    void SetCursorStartPos();
-    void Display();
-private:
-    Settings ScreenSettings;
+    private:
+    int m_width;
+    int m_height;
+    char m_background;
+    char m_screenMeshProjection;
+    float m_screenPosition;
+    int m_meshPosition;
+    std::vector<char> m_pixels;
 };
-
