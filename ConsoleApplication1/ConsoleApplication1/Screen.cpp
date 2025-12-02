@@ -1,16 +1,18 @@
 #include <iostream>
+#include <cmath>
 #include "Screen.h"
-#include "Mesh.h"
 #include "Settings.h"
+#include "Mesh.h"
 
 Screen::Screen(Settings const& settings)
 : m_width(settings.GetScreenWidth())
 , m_height(settings.GetScreenHeight())
+, m_zPosition(settings.GetScreenPosition())
 , m_background(settings.GetScreenBackground())
-, m_screenMeshProjection(settings.GetScreenMeshProjection())
-, m_screenPosition(settings.GetScreenPosition())
-, m_meshPosition(settings.GetMeshPosition())
+, m_meshProjection(settings.GetScreenMeshProjection())
+, m_meshZPosition(settings.GetMeshPosition())
 , m_pixels(m_width * m_height, '.')
+, m_oozBuffer(m_width * m_height, 0.f)
 {
 }
 
@@ -26,19 +28,45 @@ void Screen::Display() const
     }
 }
 
-void Screen::Display(Mesh const& mesh) {
+void Screen::Display(Mesh const& mesh)
+{
+    std::fill(m_pixels.begin(), m_pixels.end(), m_background);
+    ProjectMesh(mesh);
+    Display();
+}
 
-    std::vector<Vertex> meshVertices;
-    meshVertices = mesh.GetVertices();
-    for (int i = 0; i < m_height; i++)
+void Screen::ProjectMesh(Mesh const& mesh)
+{
+    std::fill(m_oozBuffer.begin(), m_oozBuffer.end(), 0.f);
+    for(Vertex vertex : mesh.GetVertices())
     {
-        for (int j = 0; j < m_width; j++)
+        ProjectInCenterScreenSpace(vertex);
+        ProjectInTopLeftScreenSpace(vertex);
+        int u = std::round(vertex.x);
+        int v = std::round(vertex.y);
+        float ooz = 1.f / vertex.z;
+        if(IsVertexInScreen(u, v) && ooz > m_oozBuffer[v * m_width + u])
         {
-            std::cout << m_pixels[m_width * i + j];
+            m_oozBuffer[v * m_width + u] = ooz;
+            m_pixels[v * m_width + u] = m_meshProjection;
         }
-        std::cout << std::endl;
     }
+}
 
-   
+void Screen::ProjectInCenterScreenSpace(Vertex& vertex)
+{
+    vertex.z += m_meshZPosition;
+    vertex.x = m_zPosition * vertex.x / vertex.z;
+    vertex.y = m_zPosition * vertex.y / vertex.z / 2.f;
+}
 
+void Screen::ProjectInTopLeftScreenSpace(Vertex& vertex)
+{
+    vertex.x += m_width/2;
+    vertex.y += m_height/2;
+}
+
+bool Screen::IsVertexInScreen(int u, int v)
+{
+    return u >= 0 && u < m_width && v >= 0 && v < m_height;
 }

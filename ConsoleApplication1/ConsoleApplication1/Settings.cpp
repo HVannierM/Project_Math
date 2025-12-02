@@ -53,6 +53,7 @@ void Settings::_ParseArguments(int argc, char** argv)
         {
             m_meshPosition = std::atoi(argv[i + 1]);
             i++;
-        
+
         }
     }
+}
