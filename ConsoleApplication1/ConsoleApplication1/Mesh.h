@@ -30,10 +30,11 @@ class Mesh
 
     std::vector<Vertex> GetVertices() const { return m_vertices; }
 
+    void GenerateTorus(float majorRadius, float minorRadius);
+
     private:
     void _GenerateSector(float radius, float angle);
 
-    private:
     std::vector<Vertex> m_vertices;
     int m_resolution;
 };

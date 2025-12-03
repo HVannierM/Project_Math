@@ -51,5 +51,11 @@ int main(int argc, char** argv)
     mesh.GenerateHalfCircle(15.f);
     std::cout << "Half Circle radius 15:" << std::endl;
     screen.Display(mesh);
+    mesh.GenerateTorus(50.f, 16.f);
+    std::cout << "Torus (major=25, minor=8) - side view:" << std::endl;
+    screen.Display(mesh);
+    mesh.Rotate(0.8f, Axis::X);
+    std::cout << "Torus rotated 0.8 rad around X:" << std::endl;
+    screen.Display(mesh);
     return 0;
 }

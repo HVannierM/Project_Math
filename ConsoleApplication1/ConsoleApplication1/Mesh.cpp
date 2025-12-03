@@ -95,3 +95,39 @@ void Mesh::Rotate(float angle, Axis axis)
         v.Rotate(angle, axis);
     }
 }
+
+
+void Mesh::GenerateTorus(float majorRadius, float minorRadius)
+{
+    if (majorRadius <= 0.f || minorRadius <= 0.f || m_resolution < 2)
+    {
+        m_vertices.clear();
+        return;
+    }
+
+    m_vertices.resize(m_resolution * m_resolution);
+
+    float zShift = majorRadius + minorRadius + 1.0f;
+
+    for (int i = 0; i < m_resolution; ++i)
+    {
+        float phi = 2.0f * PI * i / m_resolution;
+        float cosPhi = std::cos(phi);
+        float sinPhi = std::sin(phi);
+
+        for (int j = 0; j < m_resolution; ++j)
+        {
+            float theta = 2.0f * PI * j / m_resolution;
+            float cosTheta = std::cos(theta);
+            float sinTheta = std::sin(theta);
+
+            float x = (majorRadius + minorRadius * cosTheta) * cosPhi;
+            float y = minorRadius * sinTheta; 
+            float z = (majorRadius + minorRadius * cosTheta) * sinPhi;
+
+            m_vertices[m_resolution * i + j].x = x;
+            m_vertices[m_resolution * i + j].y = y;
+            m_vertices[m_resolution * i + j].z = z + zShift;
+        }
+    }
+}
