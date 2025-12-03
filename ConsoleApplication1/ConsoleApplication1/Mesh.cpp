@@ -60,3 +60,38 @@ void Mesh::_GenerateSector(float radius, float angle)
         }
     }
 }
+
+
+void Vertex::Rotate(float angle, Axis axis)
+{
+    float c = std::cos(angle);
+    float s = std::sin(angle);
+
+    float ox = x;
+    float oy = y;
+    float oz = z;
+
+    switch(axis)
+    {
+        case Axis::X:
+            y = oy * c - oz * s;
+            z = oy * s + oz * c;
+            break;
+        case Axis::Y:
+            x = ox * c + oz * s;
+            z = -ox * s + oz * c;
+            break;
+        case Axis::Z:
+            x = ox * c - oy * s;
+            y = ox * s + oy * c;
+            break;
+    }
+}
+
+void Mesh::Rotate(float angle, Axis axis)
+{
+    for(auto &v : m_vertices)
+    {
+        v.Rotate(angle, axis);
+    }
+}
