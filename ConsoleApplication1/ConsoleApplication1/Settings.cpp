@@ -4,7 +4,7 @@
 Settings::Settings(int argc, char** argv)
 : m_screenWidth(100)
 , m_screenHeight(20)
-, m_meshResolution(128)
+, m_meshResolution(32)
 , m_screenBackground('.')
 , m_screenMeshProjection('X')
 , m_screenPosition(3.33f)

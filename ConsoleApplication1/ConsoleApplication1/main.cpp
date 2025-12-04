@@ -3,6 +3,7 @@
 #include "Settings.h"
 #include "Screen.h"
 #include "Mesh.h"
+constexpr float PI = 3.14159265f;
 
 void InitConsole()
 {
@@ -43,6 +44,7 @@ int main(int argc, char** argv)
     std::cout << "Rectangle 10x20:" << std::endl;
     screen.Display(mesh);
     mesh.GenerateSquare(20.f);
+    mesh.Rotate(PI / 4, Axis::Z);
     std::cout << "Square 20x20:" << std::endl;
     screen.Display(mesh);
     mesh.GenerateCircle(15.f);
@@ -51,11 +53,11 @@ int main(int argc, char** argv)
     mesh.GenerateHalfCircle(15.f);
     std::cout << "Half Circle radius 15:" << std::endl;
     screen.Display(mesh);
-    mesh.GenerateTorus(50.f, 16.f);
-    std::cout << "Torus (major=25, minor=8) - side view:" << std::endl;
+    mesh.GenerateTorus(25.f, 8.f);
+    std::cout << "Torus (major=25, minor=8)" << std::endl;
     screen.Display(mesh);
-    mesh.Rotate(0.8f, Axis::X);
-    std::cout << "Torus rotated 0.8 rad around X:" << std::endl;
+    std::cout << "Torus rotated" << std::endl;
+    mesh.Rotate(PI / 2, Axis::Y);
     screen.Display(mesh);
     return 0;
 }

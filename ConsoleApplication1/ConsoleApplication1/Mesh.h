@@ -37,4 +37,7 @@ class Mesh
 
     std::vector<Vertex> m_vertices;
     int m_resolution;
+
+    int m_screenwidth;
+
 };

@@ -5,7 +5,8 @@
 constexpr float PI = 3.14159265f;
 
 Mesh::Mesh(Settings const& settings)
-: m_resolution(settings.GetMeshResolution())
+    : m_resolution(settings.GetMeshResolution())
+    , m_screenwidth(settings.GetScreenWidth())
 {
 }
 
@@ -64,33 +65,32 @@ void Mesh::_GenerateSector(float radius, float angle)
 
 void Vertex::Rotate(float angle, Axis axis)
 {
+
+    Vertex previous = *this;
     float c = std::cos(angle);
     float s = std::sin(angle);
 
-    float ox = x;
-    float oy = y;
-    float oz = z;
 
     switch(axis)
     {
         case Axis::X:
-            y = oy * c - oz * s;
-            z = oy * s + oz * c;
+            y = previous.y * c - previous.z * s;
+            z = previous.y * s + previous.z * c;
             break;
         case Axis::Y:
-            x = ox * c + oz * s;
-            z = -ox * s + oz * c;
+            x = previous.x * c + previous.z * s;
+            z = - previous.x * s + previous.z * c;
             break;
         case Axis::Z:
-            x = ox * c - oy * s;
-            y = ox * s + oy * c;
+            x = previous.x * c - (previous.y * s);
+            y = previous.x * s + previous.y * c;
             break;
     }
 }
 
 void Mesh::Rotate(float angle, Axis axis)
 {
-    for(auto &v : m_vertices)
+    for(Vertex &v : m_vertices)
     {
         v.Rotate(angle, axis);
     }
@@ -104,6 +104,9 @@ void Mesh::GenerateTorus(float majorRadius, float minorRadius)
         m_vertices.clear();
         return;
     }
+
+    const float K1 = m_screenwidth * 5 * 3 / (8 * (minorRadius + majorRadius));
+
 
     m_vertices.resize(m_resolution * m_resolution);
 
@@ -121,8 +124,12 @@ void Mesh::GenerateTorus(float majorRadius, float minorRadius)
             float cosTheta = std::cos(theta);
             float sinTheta = std::sin(theta);
 
-            float x = (majorRadius + minorRadius * cosTheta) * cosPhi;
-            float y = minorRadius * sinTheta; 
+            float x = majorRadius + minorRadius * cosTheta;
+            float y = minorRadius * sinTheta;
+
+           /* float x = circlex * (cosB * cosPhi + sinA * sinB * sinPhi)
+                - circley * cosA * sinB;*/
+
             float z = (majorRadius + minorRadius * cosTheta) * sinPhi;
 
             m_vertices[m_resolution * i + j].x = x;
@@ -130,4 +137,10 @@ void Mesh::GenerateTorus(float majorRadius, float minorRadius)
             m_vertices[m_resolution * i + j].z = z + zShift;
         }
     }
+}
+//
+void Mesh::GenerateTorus(float majorRadius, float minorRadius)
+{
+
+
 }
