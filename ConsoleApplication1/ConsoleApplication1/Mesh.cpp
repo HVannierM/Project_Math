@@ -99,48 +99,29 @@ void Mesh::Rotate(float angle, Axis axis)
 
 void Mesh::GenerateTorus(float majorRadius, float minorRadius)
 {
-    if (majorRadius <= 0.f || minorRadius <= 0.f || m_resolution < 2)
-    {
-        m_vertices.clear();
-        return;
-    }
+    m_vertices.clear();
 
-    const float K1 = m_screenwidth * 5 * 3 / (8 * (minorRadius + majorRadius));
-
-
-    m_vertices.resize(m_resolution * m_resolution);
-
-    float zShift = majorRadius + minorRadius + 1.0f;
-
+    constexpr float twopi = 2 * PI;
     for (int i = 0; i < m_resolution; ++i)
     {
-        float phi = 2.0f * PI * i / m_resolution;
-        float cosPhi = std::cos(phi);
-        float sinPhi = std::sin(phi);
+        float theta = (static_cast<float>(i) / m_resolution) * twopi;
+        float cosTheta = cosf(theta);
+        float sinTheta = sinf(theta);
+
+        float circleOffset = majorRadius + minorRadius * cosTheta;
 
         for (int j = 0; j < m_resolution; ++j)
         {
-            float theta = 2.0f * PI * j / m_resolution;
-            float cosTheta = std::cos(theta);
-            float sinTheta = std::sin(theta);
+            float phi = (static_cast<float>(j) / m_resolution) * 2 * twopi;
+            float cosPhi = cosf(phi);
+            float sinPhi = sinf(phi);
 
-            float x = majorRadius + minorRadius * cosTheta;
-            float y = minorRadius * sinTheta;
+            Vertex v;
+            v.x = circleOffset * cosPhi;
+            v.y = minorRadius * sinTheta;
+            v.z = circleOffset * sinPhi;
 
-           /* float x = circlex * (cosB * cosPhi + sinA * sinB * sinPhi)
-                - circley * cosA * sinB;*/
-
-            float z = (majorRadius + minorRadius * cosTheta) * sinPhi;
-
-            m_vertices[m_resolution * i + j].x = x;
-            m_vertices[m_resolution * i + j].y = y;
-            m_vertices[m_resolution * i + j].z = z + zShift;
+            m_vertices.push_back(v);
         }
     }
-}
-//
-void Mesh::GenerateTorus(float majorRadius, float minorRadius)
-{
-
-
 }
