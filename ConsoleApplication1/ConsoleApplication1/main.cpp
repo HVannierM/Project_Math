@@ -1,5 +1,5 @@
 #include <iostream>
-#include <windows.h> // For console settings
+#include <windows.h>
 #include "Settings.h"
 #include "Screen.h"
 #include "Mesh.h"
@@ -46,13 +46,13 @@ int main(int argc, char** argv)
     while (true)
     {
         std::cout << "\x1b[H";
-        mesh.Rotate(PI/12, Axis::X);
-        mesh.Rotate(PI/12, Axis::Y);
-        //mesh.Rotate(PI/12, Axis::Z);
+        mesh.Rotate(settings.GetMeshRotationXPerFrame(), Axis::Y);
+        mesh.Rotate(settings.GetMeshRotationXPerFrame(), Axis::X);
+        //mesh.Rotate(0.2, Axis::Z);
 
         screen.Display(mesh);
 
-        //Sleep(settings.GetFrameDuration());
+        Sleep(settings.GetFrameDuration()/1000);
     }
 
     return 0;

@@ -13,7 +13,7 @@ class Settings
     int GetScreenPosition() const { return m_screenPosition; }
     int GetMeshPosition() const { return m_meshPosition; }
     int GetFrameDuration() const { return m_frameDuration; }
-    int GetMeshRotationXPerFrame() const { return m_meshRotationXPerFrame; }
+    float GetMeshRotationXPerFrame() const { return m_meshRotationXPerFrame; }
 
     private:
     void _ParseArguments(int argc, char** argv);
@@ -27,5 +27,5 @@ class Settings
     float m_screenPosition;
     int m_meshPosition;
     int m_frameDuration;
-    int m_meshRotationXPerFrame;
+    float m_meshRotationXPerFrame;
 };

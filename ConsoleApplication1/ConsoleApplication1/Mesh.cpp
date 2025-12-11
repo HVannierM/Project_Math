@@ -70,21 +70,23 @@ void Vertex::Rotate(float angle, Axis axis)
     float c = std::cos(angle);
     float s = std::sin(angle);
 
-
-    switch(axis)
-    {
+    switch (axis) {
         case Axis::X:
+        {
             y = previous.y * c - previous.z * s;
             z = previous.y * s + previous.z * c;
             break;
+        }{
         case Axis::Y:
             x = previous.x * c + previous.z * s;
-            z = - previous.x * s + previous.z * c;
+            z = -previous.x * s + previous.z * c;
             break;
+        }{
         case Axis::Z:
             x = previous.x * c - (previous.y * s);
             y = previous.x * s + previous.y * c;
             break;
+        }
     }
 }
 

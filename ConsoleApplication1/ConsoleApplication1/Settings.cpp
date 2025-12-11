@@ -9,8 +9,8 @@ Settings::Settings(int argc, char** argv)
 , m_screenMeshProjection('X')
 , m_screenPosition(30)
 , m_meshPosition(10)
-, m_meshRotationXPerFrame(0.2)
-, m_frameDuration(1000)
+, m_meshRotationXPerFrame(0.02)
+, m_frameDuration(100000)
 {
     _ParseArguments(argc, argv);
 }
