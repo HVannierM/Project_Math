@@ -65,7 +65,6 @@ void Mesh::_GenerateSector(float radius, float angle)
 
 void Vertex::Rotate(float angle, Axis axis)
 {
-
     Vertex previous = *this;
     float c = std::cos(angle);
     float s = std::sin(angle);
