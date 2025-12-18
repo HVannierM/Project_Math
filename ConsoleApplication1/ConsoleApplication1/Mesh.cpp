@@ -1,6 +1,7 @@
 #include <cmath>
 #include "Mesh.h"
 #include "Settings.h"
+#include "Light.h"
 
 constexpr float PI = 3.14159265f;
 
@@ -30,6 +31,9 @@ void Mesh::GenerateRectangle(float width, float height)
             m_vertices[m_resolution * i + j].x = (1.f*i / (m_resolution - 1) - 0.5f) * width;
             m_vertices[m_resolution * i + j].y = (1.f*j / (m_resolution - 1) - 0.5f) * height;
             m_vertices[m_resolution * i + j].z = 0.f;
+            m_vertices[m_resolution * i + j].nx = 0.f;
+            m_vertices[m_resolution * i + j].ny = 0.f;
+            m_vertices[m_resolution * i + j].nz = -1.f;
         }
     }
 }
@@ -58,6 +62,9 @@ void Mesh::_GenerateSector(float radius, float angle)
             m_vertices[m_resolution * i + j].x = r * std::cos(theta);
             m_vertices[m_resolution * i + j].y = r * std::sin(theta);
             m_vertices[m_resolution * i + j].z = 0.f;
+            m_vertices[m_resolution * i + j].nx = 0.f;
+            m_vertices[m_resolution * i + j].ny = 0.f;
+            m_vertices[m_resolution * i + j].nz = -1.f;
         }
     }
 }
@@ -74,19 +81,29 @@ void Vertex::Rotate(float angle, Axis axis)
         {
             y = previous.y * c - previous.z * s;
             z = previous.y * s + previous.z * c;
+            ny = previous.ny * c - previous.nz * s;
+            nz = previous.ny * s + previous.nz * c;
             break;
         }{
         case Axis::Y:
             x = previous.x * c + previous.z * s;
             z = -previous.x * s + previous.z * c;
+            nx = previous.nz * s + previous.nx * c;
+            nz = previous.nz * c - previous.nx * s;
             break;
         }{
         case Axis::Z:
             x = previous.x * c - (previous.y * s);
             y = previous.x * s + previous.y * c;
+            nx = previous.nx * c - previous.ny * s;
+            ny = previous.nx * s + previous.ny * c;
             break;
         }
     }
+}
+
+float Vertex::ComputeIllumination(Light const& light) const {
+    return nx*light.get
 }
 
 void Mesh::Rotate(float angle, Axis axis)
@@ -109,6 +126,10 @@ void Mesh::GenerateTorus(float majorRadius, float minorRadius)
             float angleZ = (2 * PI * j) / (m_resolution - 1);
             m_vertices[m_resolution * i + j].x = majorRadius + minorRadius * std::cos(angleZ);
             m_vertices[m_resolution * i + j].y = minorRadius * std::sin(angleZ);
+            m_vertices[m_resolution * i + j].z = 0.f;
+            m_vertices[m_resolution * i + j].nx = std::cos(angleZ);
+            m_vertices[m_resolution * i + j].ny = std::sin(angleZ);
+            m_vertices[m_resolution * i + j].nz = 0.f;
             m_vertices[m_resolution * i + j].Rotate(angleY, Axis::Y);
         }
     }
